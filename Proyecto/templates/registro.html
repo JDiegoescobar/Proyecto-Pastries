@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro | Ríos Pastries</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .registro-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+        h2 { margin-bottom: 1.5rem; color: #333; }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #e89bb0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover { background-color: #d68a9f; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        .mensaje {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: none;
+        }
+        .error { background-color: #fdecea; color: #e74c3c; display: block; }
+        .exito { background-color: #eafaf1; color: #2ecc71; display: block; }
+        .links { margin-top: 15px; font-size: 14px; }
+        .links a { color: #e89bb0; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="registro-box">
+        <h2>Crear Cuenta 🧁</h2>
+        <div id="mensaje" class="mensaje"></div>
+        <form id="registroForm">
+            <input type="text" id="nombre" placeholder="Nombre completo" required>
+            <input type="email" id="email" placeholder="Correo electrónico" required>
+            <input type="password" id="password" placeholder="Contraseña" required minlength="6">
+            <input type="password" id="confirmPassword" placeholder="Confirmar contraseña" required minlength="6">
+            <button type="submit" id="btnRegistro">Registrarse</button>
+        </form>
+        <div class="links">
+            <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>
+            <p><a href="index.html">← Volver al inicio</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registroForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const mensajeDiv = document.getElementById('mensaje');
+            const btn = document.getElementById('btnRegistro');
+            const nombre = document.getElementById('nombre').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                mensajeDiv.className = 'mensaje error';
+                mensajeDiv.textContent = 'Las contraseñas no coinciden.';
+                return;
+            }
+
+            btn.textContent = 'Creando cuenta...';
+            btn.disabled = true;
+            mensajeDiv.className = 'mensaje';
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/usuarios/registro', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        nombre: nombre, 
+                        email: email, 
+                        password: password,
+                        rol: "cliente"
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    mensajeDiv.className = 'mensaje exito';
+                    mensajeDiv.textContent = '¡Cuenta creada con éxito! Redirigiendo...';
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    mensajeDiv.className = 'mensaje error';
+                    mensajeDiv.textContent = data.detail || 'Error al crear la cuenta';
+                }
+            } catch (error) {
+                mensajeDiv.className = 'mensaje error';
+                mensajeDiv.textContent = 'No se pudo conectar con la API';
+            } finally {
+                btn.textContent = 'Registrarse';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

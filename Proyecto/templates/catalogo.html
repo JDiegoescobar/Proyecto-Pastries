@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo | Ríos Pastries</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+        header { text-align: center; margin-bottom: 30px; }
+        h1 { color: #333; }
+        .btn-volver { display: inline-block; margin-top: 10px; color: #e89bb0; text-decoration: none; }
+        
+        /* Cuadrícula de productos */
+        .grid-productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .producto-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .producto-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            background-color: #eee;
+        }
+        .producto-card h3 { margin: 10px 0 5px; color: #333; }
+        .producto-card p { color: #666; font-size: 14px; margin: 5px 0; }
+        .precio { color: #e89bb0; font-weight: bold; font-size: 18px; margin-top: 10px; }
+        .mensaje { text-align: center; color: #666; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Nuestro Catálogo 🧁</h1>
+        <a href="index.html" class="btn-volver">← Volver al inicio</a>
+    </header>
+
+    <div id="contenedor-productos" class="grid-productos">
+        <p class="mensaje">Cargando productos...</p>
+    </div>
+
+    <script>
+        async function cargarCatalogo() {
+            const contenedor = document.getElementById('contenedor-productos');
+            
+            try {
+                // Llamada a la API para obtener los productos
+                const response = await fetch('http://127.0.0.1:8000/api/productos/');
+                const productos = await response.json();
+
+                if (productos.length === 0) {
+                    contenedor.innerHTML = '<p class="mensaje">Aún no hay productos disponibles.</p>';
+                    return;
+                }
+
+                // Generar el HTML para cada producto
+                let html = '';
+                productos.forEach(prod => {
+                    // Usamos una imagen por defecto si no tiene
+                    const imagen = prod.imagen || 'https://via.placeholder.com/250x150?text=Pastel';
+                    
+                    html += `
+                        <div class="producto-card">
+                            <img src="${imagen}" alt="${prod.nombre}">
+                            <h3>${prod.nombre}</h3>
+                            <p>${prod.descripcion || 'Sin descripción'}</p>
+                            <p class="precio">$${prod.precio.toFixed(2)}</p>
+                        </div>
+                    `;
+                });
+
+                contenedor.innerHTML = html;
+
+            } catch (error) {
+                contenedor.innerHTML = '<p class="mensaje" style="color:red;">Error al cargar el catálogo. Verifica que la API esté corriendo.</p>';
+                console.error(error);
+            }
+        }
+
+        // Ejecutar al cargar la página
+        cargarCatalogo();
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña | Ríos Pastries</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .box { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        h2 { margin-bottom: 1.5rem; color: #333; }
+        input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #e89bb0; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:hover { background-color: #d68a9f; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        .mensaje { margin-bottom: 15px; padding: 10px; border-radius: 4px; font-size: 14px; display: none; }
+        .error { background-color: #fdecea; color: #e74c3c; display: block; }
+        .exito { background-color: #eafaf1; color: #2ecc71; display: block; }
+        .links { margin-top: 15px; font-size: 14px; }
+        .links a { color: #e89bb0; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Recuperar Contraseña 🔑</h2>
+        <div id="mensaje" class="mensaje"></div>
+        
+        <!-- Paso 1: Solicitar correo -->
+        <form id="formCorreo">
+            <p style="font-size: 14px; color: #666; margin-bottom: 15px;">Ingresa tu correo y te enviaremos un código de recuperación.</p>
+            <input type="email" id="email" placeholder="Correo electrónico" required>
+            <button type="submit" id="btnEnviar">Enviar código</button>
+        </form>
+
+        <!-- Paso 2: Ingresar código y nueva contraseña (oculto al inicio) -->
+        <form id="formCambiar" style="display: none;">
+            <p style="font-size: 14px; color: #666; margin-bottom: 15px;">Revisa el mensaje de éxito para ver tu código (simulación de correo).</p>
+            <input type="text" id="token" placeholder="Código de recuperación" required>
+            <input type="password" id="nueva_password" placeholder="Nueva contraseña" required minlength="6">
+            <input type="password" id="confirmar_password" placeholder="Confirmar nueva contraseña" required minlength="6">
+            <button type="submit" id="btnCambiar">Cambiar contraseña</button>
+        </form>
+
+        <div class="links">
+            <p><a href="login.html">← Volver al inicio de sesión</a></p>
+        </div>
+    </div>
+
+    <script>
+        let emailUsuario = '';
+
+        // PASO 1: Enviar correo
+        document.getElementById('formCorreo').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const mensajeDiv = document.getElementById('mensaje');
+            const btn = document.getElementById('btnEnviar');
+            emailUsuario = document.getElementById('email').value.trim();
+
+            btn.textContent = 'Enviando...';
+            btn.disabled = true;
+            mensajeDiv.className = 'mensaje';
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/usuarios/recuperar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailUsuario })
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    mensajeDiv.className = 'mensaje exito';
+                    mensajeDiv.textContent = data.mensaje + (data.token_recuperacion ? ` Tu código es: ${data.token_recuperacion}` : '');
+                    
+                    // Mostrar el paso 2
+                    document.getElementById('formCorreo').style.display = 'none';
+                    document.getElementById('formCambiar').style.display = 'block';
+                    
+                    // Autollenar el token para facilitar las pruebas
+                    if(data.token_recuperacion) {
+                        document.getElementById('token').value = data.token_recuperacion;
+                    }
+                } else {
+                    mensajeDiv.className = 'mensaje error';
+                    mensajeDiv.textContent = data.detail || 'Error al procesar la solicitud';
+                }
+            } catch (error) {
+                mensajeDiv.className = 'mensaje error';
+                mensajeDiv.textContent = 'No se pudo conectar con la API';
+            } finally {
+                btn.textContent = 'Enviar código';
+                btn.disabled = false;
+            }
+        });
+
+        // PASO 2: Cambiar contraseña
+        document.getElementById('formCambiar').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const mensajeDiv = document.getElementById('mensaje');
+            const btn = document.getElementById('btnCambiar');
+            const token = document.getElementById('token').value.trim();
+            const nueva_password = document.getElementById('nueva_password').value;
+            const confirmar_password = document.getElementById('confirmar_password').value;
+
+            if (nueva_password !== confirmar_password) {
+                mensajeDiv.className = 'mensaje error';
+                mensajeDiv.textContent = 'Las contraseñas no coinciden.';
+                return;
+            }
+
+            btn.textContent = 'Guardando...';
+            btn.disabled = true;
+            mensajeDiv.className = 'mensaje';
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/usuarios/cambiar-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailUsuario, token: token, nueva_password: nueva_password })
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    mensajeDiv.className = 'mensaje exito';
+                    mensajeDiv.textContent = '¡Contraseña actualizada con éxito! Redirigiendo al login...';
+                    setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+                } else {
+                    mensajeDiv.className = 'mensaje error';
+                    mensajeDiv.textContent = data.detail || 'Código inválido o expirado';
+                }
+            } catch (error) {
+                mensajeDiv.className = 'mensaje error';
+                mensajeDiv.textContent = 'No se pudo conectar con la API';
+            } finally {
+                btn.textContent = 'Cambiar contraseña';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

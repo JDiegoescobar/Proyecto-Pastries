@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ríos Pastries | Pasteles, Postres y Eventos</title>
+    <!-- Fuentes de Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- VARIABLES DE DISEÑO (Paleta Pastel y Acogedora) --- */
+        :root {
+            --rosa-claro: #fdf2f5;
+            --rosa-fuerte: #e89bb0;
+            --crema: #fff8f0;
+            --dorado: #c9a961;
+            --texto-oscuro: #4a4a4a;
+            --texto-claro: #7a7a7a;
+            --blanco: #ffffff;
+            --verde-abierto: #4caf50;
+            --rojo-cerrado: #f44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--crema);
+            color: var(--texto-oscuro);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--texto-oscuro);
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- HEADER Y NAVEGACIÓN --- */
+        header {
+            background-color: var(--blanco);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--rosa-fuerte);
+        }
+
+        .logo span { color: var(--dorado); }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--rosa-fuerte); }
+
+        .status-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge.abierto { background-color: var(--verde-abierto); }
+        .status-badge.cerrado { background-color: var(--rojo-cerrado); }
+
+        .btn-login {
+            background-color: var(--rosa-fuerte);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn-login:hover { background-color: var(--dorado); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background: linear-gradient(rgba(253, 242, 245, 0.8), rgba(255, 248, 240, 0.8)), url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--texto-oscuro);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--texto-claro);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn-primary {
+            background-color: var(--dorado);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: transform 0.3s, background 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--rosa-fuerte);
+            transform: translateY(-3px);
+        }
+
+        /* --- SECCIONES GENERALES --- */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--texto-claro);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* --- SOBRE NOSOTROS (LOCAL) --- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-img img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .about-text h2 { font-size: 2.2rem; margin-bottom: 1rem; }
+        .about-text p { margin-bottom: 1rem; color: var(--texto-claro); }
+        
+        .features {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            text-align: center;
+        }
+
+        .feature-item i {
+            font-size: 2rem;
+            color: var(--rosa-fuerte);
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- LOCALES --- */
+        .locations { background-color: var(--rosa-claro); }
+        .locations-container { max-width: 1200px; margin: 0 auto; }
+
+        .location-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .location-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .location-card:hover { transform: translateY(-10px); }
+        .location-card i { font-size: 3rem; color: var(--dorado); margin-bottom: 1rem; }
+        .location-card h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+        /* --- PRODUCTOS DESTACADOS --- */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover { transform: translateY(-5px); }
+        
+        .product-img {
+            height: 200px;
+            background-color: var(--rosa-claro);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-img i { font-size: 4rem; color: var(--rosa-fuerte); }
+
+        .product-info { padding: 1.5rem; }
+        .product-info h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .product-info p { color: var(--texto-claro); font-size: 0.9rem; margin-bottom: 1rem; }
+        .price { color: var(--dorado); font-weight: 700; font-size: 1.2rem; }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--texto-oscuro);
+            color: white;
+            padding: 3rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .footer-col h4 { color: var(--dorado); margin-bottom: 1rem; font-family: 'Poppins', sans-serif; }
+        .footer-col ul li { margin-bottom: 0.5rem; }
+        .footer-col ul li a:hover { color: var(--rosa-fuerte); }
+
+        .copyright {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 1rem;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .about-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">Ríos <span>Pastries</span></a>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#nosotros">El Local</a></li>
+                <li><a href="#locales">Locales</a></li>
+                <li><a href="#productos">Catálogo</a></li>
+                <li><a href="#eventos">Eventos</a></li>
+            </ul>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div id="status-badge" class="status-badge">
+                    <i class="fas fa-clock"></i> <span id="status-text">Cargando...</span>
+                </div>
+                <a href="login.html" class="btn-login">Iniciar Sesión</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>Dulce, Acogedor y Familiar</h1>
+            <p>Descubre los mejores pasteles, postres y bebidas en un ambiente diseñado para que disfrutes con tu familia y amigos. ¡Haz tu pedido o reserva tu evento hoy!</p>
+            <a href="#productos" class="btn-primary">Ver Catálogo <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- SOBRE EL LOCAL -->
+    <section id="nosotros">
+        <div class="about-grid">
+            <div class="about-img">
+                <img src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Interior de Ríos Pastries">
+            </div>
+            <div class="about-text">
+                <h2>Nuestro Espacio para Ti</h2>
+                <p>Ríos Pastries cuenta con un local amplio y cómodo, con capacidad aproximada para <strong>150 personas</strong>. Nuestro establecimiento está diseñado para ofrecer un ambiente agradable y acogedor.</p>
+                <p>Contamos con área de mesas, mostradores para exhibir nuestros productos, zona de caja, cocina y espacios destinados para pedidos para llevar y entregas a domicilio.</p>
+                
+                <div class="features">
+                    <div class="feature-item">
+                        <i class="fas fa-users"></i>
+                        <p>Capacidad 150</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-wifi"></i>
+                        <p>WiFi Gratis</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-motorcycle"></i>
+                        <p>Delivery</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOCALES -->
+    <section id="locales" class="locations">
+        <div class="locations-container">
+            <h2 class="section-title">Nuestros Locales</h2>
+            <p class="section-subtitle">Visítanos en cualquiera de nuestras dos sucursales. Ambas cuentan con salas exclusivas para tus eventos.</p>
+            
+            <div class="location-cards">
+                <div class="location-card">
+                    <i class="fas fa-store"></i>
+                    <h3>Local San Miguel</h3>
+                    <p>Sala 1 y Sala 2 disponibles para eventos.</p>
+                    <a href="#" style="color: var(--rosa-fuerte); font-weight: 600; margin-top: 1rem; display: inline-block;">Ver disponibilidad <i class="fas fa-calendar-alt"></i></a>
+                </div>
+                <div class="location-card">
+                    <i class="fas fa-store-alt"></i>
+                    <h3>Local La Unión</h3>
+                    <p>Sala 1 y Sala 2 disponibles para eventos.</p>
+                    <a href="#" style="color: var(--rosa-fuerte); font-weight: 600; margin-top: 1rem; display: inline-block;">Ver disponibilidad <i class="fas fa-calendar-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCTOS -->
+    <section id="productos">
+        <h2 class="section-title">Nuestro Catálogo</h2>
+        <p class="section-subtitle">Pasteles, postres, repostería y bebidas preparadas con los mejores ingredientes.</p>
+        
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-img"><i class="fas fa-birthday-cake"></i></div>
+                <div class="product-info">
+                    <h3>Pasteles Personalizados</h3>
+                    <p>Diseños únicos para tus celebraciones.</p>
+                    <span class="price">Desde $25.00</span>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img"><i class="fas fa-cookie-bite"></i></div>
+                <div class="product-info">
+                    <h3>Cupcakes y Postres</h3>
+                    <p>Variedad de sabores y decoraciones.</p>
+                    <span class="price">Desde $2.50</span>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img"><i class="fas fa-coffee"></i></div>
+                <div class="product-info">
+                    <h3>Bebidas Calientes</h3>
+                    <p>Café, chocolate y tés especiales.</p>
+                    <span class="price">Desde $3.00</span>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img"><i class="fas fa-glass-cheers"></i></div>
+                <div class="product-info">
+                    <h3>Bebidas Frías</h3>
+                    <p>Refrescos, jugos y batidos naturales.</p>
+                    <span class="price">Desde $2.00</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>Ríos Pastries</h4>
+                <p>Un espacio donde las personas pueden comprar, disfrutar y compartir en un ambiente cómodo y familiar.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#productos">Catálogo</a></li>
+                    <li><a href="#eventos">Reservar Evento</a></li>
+                    <li><a href="login.html">Mi Cuenta</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Horario de Pedidos</h4>
+                <ul>
+                    <li>Lunes a Domingo</li>
+                    <li>9:00 a.m. - 7:00 p.m.</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> San Miguel & La Unión</li>
+                    <li><i class="fas fa-phone"></i> +503 0000-0000</li>
+                    <li><i class="fas fa-envelope"></i> info@riospastries.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 Ríos Pastries. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPT PARA EL ESTADO ABIERTO/CERRADO -->
+    <script>
+        function verificarHorario() {
+            const ahora = new Date();
+            const hora = ahora.getHours();
+            const badge = document.getElementById('status-badge');
+            const texto = document.getElementById('status-text');
+
+            // Horario de 9:00 a.m. a 7:00 p.m. (19:00)
+            if (hora >= 9 && hora < 19) {
+                badge.classList.add('abierto');
+                badge.classList.remove('cerrado');
+                texto.textContent = 'ABIERTO';
+            } else {
+                badge.classList.add('cerrado');
+                badge.classList.remove('abierto');
+                texto.textContent = 'CERRADO';
+            }
+        }
+
+        // Ejecutar al cargar y cada minuto
+        verificarHorario();
+        setInterval(verificarHorario, 60000);
+    </script>
+
+</body>
+</html>

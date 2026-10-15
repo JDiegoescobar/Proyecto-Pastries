@@ -1,0 +1,96 @@
+/* static/css/styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+  --rosa-claro: #fdf2f5;
+  --rosa-fuerte: #e89bb0;
+  --crema: #fff8f0;
+  --dorado: #c9a961;
+  --texto: #4a3b3b;
+  --sombra: 0 4px 20px rgba(200, 150, 150, 0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+body {
+  background-color: var(--crema);
+  color: var(--texto);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  background: #ffffff;
+  padding: 1rem 2rem;
+  box-shadow: var(--sombra);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo { font-size: 1.5rem; font-weight: 700; color: var(--rosa-fuerte); text-decoration: none; }
+
+.nav-links { display: flex; gap: 1.5rem; list-style: none; }
+.nav-links a {
+  text-decoration: none;
+  color: var(--texto);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--dorado); }
+
+/* Indicador de Estado del Negocio */
+.estado-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+.estado-abierto { background-color: #4caf50; }
+.estado-cerrado { background-color: #e53935; }
+
+/* Contenido Principal */
+main { flex: 1; padding: 2rem; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+.hero {
+  text-align: center;
+  padding: 4rem 1rem;
+  background: linear-gradient(135deg, var(--rosa-claro), #ffffff);
+  border-radius: 20px;
+  box-shadow: var(--sombra);
+  margin-bottom: 2rem;
+}
+
+.hero h1 { font-size: 2.5rem; color: var(--rosa-fuerte); margin-bottom: 1rem; }
+.hero p { font-size: 1.1rem; color: #666; margin-bottom: 2rem; }
+
+.btn {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background-color: var(--rosa-fuerte);
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+  cursor: pointer;
+}
+.btn:hover { transform: translateY(-3px); box-shadow: var(--sombra); background-color: #d68a9f; }
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  background: #ffffff;
+  color: #888;
+  font-size: 0.9rem;
+  margin-top: auto;
+}
